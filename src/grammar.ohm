@@ -1,0 +1,11 @@
+Area51Grammar {
+  SqlExpr = "SELECT" SqlSelection "FROM" TableExpr //  ("," SqlSelection)*
+  SqlSelection
+  =  "*" -- wildcard
+  | ident -- column
+  TableExpr = ident
+  select = "SELECT" ~alnum
+  from = "FROM" ~alnum
+  keywords = "SELECT" | "FROM"
+  ident = ~keywords letter alnum*
+}
