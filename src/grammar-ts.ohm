@@ -1,0 +1,45 @@
+Area51Grammar {
+  Program = Statement+
+  Statement = Assignment | ExprStatement
+  sourceCharacter = any
+
+  // Override Ohm's built-in definition of space.
+  space := whitespace | lineTerminator | comment
+  whitespace = "\t"
+             | " "
+  lineTerminator = "\n" | "\r"
+  comment = multiLineComment | singleLineComment
+
+  multiLineComment = "/*" (~"*/" sourceCharacter)* "*/"
+  singleLineComment = "//" (~lineTerminator sourceCharacter)*
+
+  Assignment = const ident "=" Expr ";"
+  MemberExpr
+  = MemberExpr "." ident -- propAccessor
+  | ident -- closureAccessor
+  | literal -- literal
+  CallExpr
+  = CallExpr "." ident -- propAccessor
+  | CallExpr Arguments -- call
+  | MemberExpr Arguments -- member
+  Arguments = "(" ListOf<Expr,","> ")"
+  ExprStatement = (SqlExpr | CallExpr) ";"
+  Expr = SqlExpr | CallExpr | MemberExpr
+  LiteralExpr = number | stringLiteral
+  SqlExpr = "SELECT" SqlSelection "FROM" TableExpr //  ("," SqlSelection)*
+  SqlSelection
+  =  "*" -- wildcard
+  | ident -- column
+  | ref -- ref
+  TableExpr = ident
+  const = "const" ~alnum
+  select = "SELECT" ~alnum
+  from = "FROM" ~alnum
+  keywords = "const" | "SELECT" | "FROM"
+  ref = "$" ident
+  ident = ~keywords letter (alnum)*
+  literal = number | stringLiteral
+  number = digit+
+  stringLiteral = "\"" chars "\""
+  chars = (~"\"" any)*
+}

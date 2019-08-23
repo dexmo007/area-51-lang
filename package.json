@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "alasql": "^0.4.11",
     "ohm-js": "^0.14.0"
   },
   "devDependencies": {

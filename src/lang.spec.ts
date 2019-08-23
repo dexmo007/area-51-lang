@@ -1,8 +1,8 @@
-import { SqlExprContext, createInterpreter, Interpreter } from './lang';
+import { DatabaseContext, createInterpreter, Interpreter } from './lang';
 
 describe('lang', () => {
   const rows = [[1, 'foo'], [2, 'bar']];
-  const ctx: SqlExprContext = {
+  const ctx: DatabaseContext = {
     tables: {
       TABLE: {
         tableName: 'TABLE',

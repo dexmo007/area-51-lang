@@ -6,7 +6,7 @@ const grammar = ohm.grammar(
   readFileSync(resolve(__dirname, 'grammar.ohm'), { encoding: 'utf8' })
 );
 
-export interface SqlExprContext {
+export interface DatabaseContext {
   tables: { [tableName: string]: TableContext };
 }
 
@@ -41,7 +41,7 @@ const semantics = grammar.createSemantics().addOperation('eval', {
   },
   SqlExpr(select, sel0, from, table) {
     const selector: Selector = sel0.eval();
-    return (ctx: SqlExprContext) => {
+    return (ctx: DatabaseContext) => {
       const tableName = table.eval();
       const tableContext = ctx.tables[tableName];
       if (!tableContext) {
@@ -59,7 +59,7 @@ export interface Interpreter {
   eval(source: string): Row[];
 }
 
-export function createInterpreter(ctx: SqlExprContext): Interpreter {
+export function createInterpreter(ctx: DatabaseContext): Interpreter {
   return {
     eval(source: string) {
       const m = grammar.match(source);
